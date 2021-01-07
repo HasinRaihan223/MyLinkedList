@@ -39,11 +39,26 @@ public class MyLinkedList{
       start = temp;
       size++;
     }
-    //Finish middle case
+    else {
+      Node current = start;
+      for (int i = 0; i < index; i++) {
+        current = current.getNext();
+      }
+      Node newNode = new Node(value);
+      newNode.setNext(current);
+      newNode.setPrev(current.getPrev());
+      current.getPrev().setNext(newNode);
+      current.setPrev(newNode);
+      size++;
+    }
   }
 
   public String get(int index){
-
+    Node current = start;
+    for(int i = 0; i < index; i++){
+      current = current.getNext();
+    }
+    return current.getData();
   }
 
   public String set(int index, String value){
@@ -51,7 +66,15 @@ public class MyLinkedList{
   }
 
   public String toString(){
-
+    String str = "[";
+    Node current = start;
+    for(int i = 0; i < size - 1; i++){
+      str += current.getData();
+      str += ", ";
+    }
+    str += end.getData();
+    str += "]"
+    return str;
   }
 
 }
