@@ -20,16 +20,16 @@ public class Node{
    return next;
  }
 
- public void setNext(String newValue)){
-   next = new Node(newValue);
+ public void setNext(Node newNext){
+   next = newNext;
  }
 
  public Node getPrev(){
    return prev;
  }
 
- public void setPrev(String newValue)){
-   prev = new Node(newValue);
+ public void setPrev(Node newPrev){
+   prev = newPrev;
  }
 
 }
