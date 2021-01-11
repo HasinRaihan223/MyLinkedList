@@ -74,26 +74,43 @@ public class MyLinkedList{
     return str;
   }
 
+  // public String toString() {
+	// 	String s = "[";
+	// 	Node current = start;
+	// 	for (int i = 0; i < size() - 1; i++){
+	// 		s += current.getData() + ", ";
+	// 		current = current.getNext();
+	// 	}
+	// 	s += current.getData() + "]";
+	// 	return s;
+	// }
+
   public String toString() {
-		String s = "[";
-		Node current = start;
-		for (int i = 0; i < size() - 1; i++){
-			s += current.getData() + ", ";
-			current = current.getNext();
-		}
-		s += current.getData() + "]";
-		return s;
-	}
+    String s = "[";
+    Node current = start;
+    for(int i = 0; i < size; i++) {
+      s += current.getData();
+      if(i!=size - 1){
+        s += ", ";
+      }
+      current = current.getNext();
+    }
+    s += "]";
+    return s;
+  }
 
   //Reversed
   public String toStringReversed() {
     String s = "[";
     Node current = end;
-    for(int i = 0; i < size() - 1; ++i){
-      s += current.getData() + ", ";
+    for(int i = 0; i < size; i++) {
+      s += current.getData();
+      if(i!=size - 1){
+        s += ", ";
+      }
       current = current.getPrev();
     }
-    s += current.getData() + "]";
+    s += "]";
     return s;
   }
 
@@ -134,7 +151,7 @@ public class MyLinkedList{
     }
     else{
       Node middleNode = findNode(index);
-      s += removeThis.getData();
+      s += middleNode.getData();
       Node beforeMid = middleNode.getPrev();
       Node afterMid = middleNode.getNext();
       //breaks beforeMid & middleNode
@@ -149,6 +166,16 @@ public class MyLinkedList{
       size--;
     }
     return s;
+  }
+
+  public void extend(MyLinkedList other){
+    end.setNext(other.start);
+    other.start.setPrev(end);
+    end = other.end;
+    size += other.size();
+    other.size = 0;
+    other.start = null;
+    other.end = null;
   }
 
 }
