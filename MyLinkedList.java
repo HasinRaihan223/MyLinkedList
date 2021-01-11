@@ -4,6 +4,8 @@ public class MyLinkedList{
 
   public MyLinkedList(){
     size = 0;
+    // start = null;
+    // end = null;
   }
 
   public int size(){
@@ -12,77 +14,141 @@ public class MyLinkedList{
 
   public boolean add(String value){
     if(size==0){
-      start = new Node(value);
-      end = new Node(value);
+      Node node = new Node(value);
+      start = node;
+      end = node;
       size++;
     }
     else {
-      end.setNext(new Node(value));
-      end.getNext().setPrev(end);
-      end = end.getNext();
+      Node newNode = new Node(value);
+      end.setNext(newNode);
+      newNode.setPrev(end);
+      end = newNode;
       size++;
     }
     return true;
   }
 
   public void add(int index, String value){
-    if (index < 0 || index > size()){
+    if (index < 0 || (index > size())){
       throw new IndexOutOfBoundsException("Index " + index + " is out of bounds");
     }
     if (index==size){
       add(value);
     }
-    if (index==0){
+    else if (index==0){
       Node temp = new Node(value);
-      start.setPrev(temp);
       temp.setNext(start);
+      start.setPrev(temp);
       start = temp;
       size++;
     }
     else {
-      Node current = start;
-      for (int i = 0; i < index; i++) {
-        current = current.getNext();
-      }
+      Node current = findNode(index);
+      Node prevCurrent = current.getPrev();
       Node newNode = new Node(value);
+      // Connects prevCurrent & newNode
+      prevCurrent.setNext(newNode);
+      newNode.setPrev(prevCurrent);
+      // Connects newNode & current
       newNode.setNext(current);
-      newNode.setPrev(current.getPrev());
-      current.getPrev().setNext(newNode);
       current.setPrev(newNode);
       size++;
     }
   }
 
   public String get(int index){
-    if (index < 0 || index > size()){
+    if (index < 0 || index >= size()){
       throw new IndexOutOfBoundsException("Index " + index + " is out of bounds");
     }
-    Node current = start;
-    for(int i = 0; i < index; i++){
-      current = current.getNext();
-    }
-    return current.getData();
+    return findNode(index).getData();
   }
 
   public String set(int index, String value){
-    if (index < 0 || index > size()){
+    if (index < 0 || index >= size()){
       throw new IndexOutOfBoundsException("Index " + index + " is out of bounds");
     }
-    Node temp = new Node(get(index));
+    Node temp = findNode(index);
     String str = temp.getData();
     temp.setData(value);
     return str;
   }
 
-  public String toString(){
-    String str = "[";
-    Node current = start;
-    for(int i = 0; i < size - 1; i++){
-      str += current.getData();
-      str += ", ";
+  public String toString() {
+		String s = "[";
+		Node current = start;
+		for (int i = 0; i < size() - 1; i++){
+			s += current.getData() + ", ";
+			current = current.getNext();
+		}
+		s += current.getData() + "]";
+		return s;
+	}
+
+  //Reversed
+  public String toStringReversed() {
+    String s = "[";
+    Node current = end;
+    for(int i = 0; i < size() - 1; ++i){
+      s += current.getData() + ", ";
+      current = current.getPrev();
     }
-    str += end.getData() + "]";
-    return str;
+    s += current.getData() + "]";
+    return s;
+  }
+
+  private Node findNode(int index) {
+    Node current = start;
+    for(int i = 0; i < index; i++) {
+      current = current.getNext();
+    }
+    return current;
+  }
+
+  public String remove(int index){
+    if (index < 0 || index >= size()){
+      throw new IndexOutOfBoundsException("Index " + index + " is out of bounds");
+    }
+    String s = "";
+    if (size==1){
+      s += start.getData();
+      start = null;
+      start = null;
+      size--;
+    }
+    else if(index==0){
+      s += start.getData();
+      Node newStart = start.getNext();
+      start.setNext(null);
+      newStart.setPrev(null);
+      start = newStart;
+      size--;
+    }
+    else if(index==size-1){
+      s += end.getData();
+      Node newEnd = end.getPrev();
+      newEnd.setNext(null);
+      end.setPrev(null);
+      end = newEnd;
+      size--;
+    }
+    else{
+      Node middleNode = findNode(index);
+      s += removeThis.getData();
+      Node beforeMid = middleNode.getPrev();
+      Node afterMid = middleNode.getNext();
+      //breaks beforeMid & middleNode
+      beforeMid.setNext(null);
+      middleNode.setPrev(null);
+      //breaks middleNode & afterMid
+      middleNode.setNext(null);
+      afterMid.setPrev(null);
+      //connects before & after
+      beforeMid.setNext(afterMid);
+      afterMid.setPrev(beforeMid);
+      size--;
+    }
+    return s;
   }
 
 }
